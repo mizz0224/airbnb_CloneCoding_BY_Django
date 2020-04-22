@@ -7,6 +7,12 @@ class ItemAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(models.Facility, models.Amenity, models.HouseRule)
+class ItemAdmin(admin.ModelAdmin):
+
+    pass
+
+
 @admin.register(models.Room)
 class RoomAdmin(admin.ModelAdmin):
 
