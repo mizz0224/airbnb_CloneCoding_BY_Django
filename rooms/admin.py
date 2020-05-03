@@ -1,22 +1,22 @@
 from django.contrib import admin
 from . import models
 
-# Register your models here.
-@admin.register(models.RoomType)
-class ItemAdmin(admin.ModelAdmin):
-    pass
 
-
-@admin.register(models.Facility, models.Amenity, models.HouseRule)
+@admin.register(models.RoomType, models.Facility, models.Amenity, models.HouseRule)
 class ItemAdmin(admin.ModelAdmin):
-    """Item Admin Definition """
+    """ Item Admin Definition """
+
+    list_display = ("name", "used_by")
+
+    def used_by(self, obj):
+        return obj.rooms.count()
 
     pass
 
 
 @admin.register(models.Room)
 class RoomAdmin(admin.ModelAdmin):
-    """Room Admin Definition """
+    """ Room Admin Definition """
 
     fieldsets = (
         (
@@ -47,6 +47,8 @@ class RoomAdmin(admin.ModelAdmin):
         "check_out",
         "instant_book",
         "count_amenities",
+        "count_photos",
+        "total_rating",
     )
 
     list_filter = (
@@ -59,20 +61,11 @@ class RoomAdmin(admin.ModelAdmin):
         "city",
         "country",
     )
-    search_fields = ("city", "^host__username")
-
-    filter_horizontal = (
-        "amenities",
-        "facilities",
-        "house_rules",
-    )
+    search_fields = ("=city", "^host__username")
+    filter_horizontal = ("amenities", "facilities", "house_rules")
 
     def count_amenities(self, obj):
         return obj.amenities.count()
 
-
-@admin.register(models.Photo)
-class PhotoAdmin(admin.ModelAdmin):
-    """Photo Admin Definition """
-
-    pass
+    def count_photos(self, obj):
+        return obj.photos.count()

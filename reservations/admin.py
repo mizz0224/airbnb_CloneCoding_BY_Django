@@ -6,6 +6,7 @@ from . import models
 
 @admin.register(models.Reservation)
 class ReservationAdmin(admin.ModelAdmin):
-    """Reverati Admin Definition"""
+
+    """ Reservation Admin Definition """
 
     pass
