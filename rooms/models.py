@@ -4,7 +4,6 @@ from core import models as core_models
 
 
 class AbstractItem(core_models.TimeStampedModel):
-
     """ Abstract Item """
 
     name = models.CharField(max_length=80)
@@ -17,39 +16,40 @@ class AbstractItem(core_models.TimeStampedModel):
 
 
 class RoomType(AbstractItem):
-    """RoomType Model Definition"""
+    """ RoomType Model Definition """
 
     class Meta:
         verbose_name = "Room Type"
-        ordering = ["name"]
 
 
 class Amenity(AbstractItem):
-    """Amenity Model Definition"""
+    """ Amenity Model Definition """
 
     class Meta:
         verbose_name_plural = "Amenities"
 
 
 class Facility(AbstractItem):
-    """Facility Model Definition"""
+    """ Facility Model Definition """
+
+    pass
 
     class Meta:
         verbose_name_plural = "Facilities"
 
 
 class HouseRule(AbstractItem):
-    """HouseRule Model Definition"""
+    """ HouseRule Model Definition """
 
     class Meta:
         verbose_name = "House Rule"
 
 
 class Photo(core_models.TimeStampedModel):
-    """Photo Model Definition"""
+    """ Photo Model Definition """
 
     caption = models.CharField(max_length=80)
-    file_image = models.ImageField()
+    file = models.ImageField()
     room = models.ForeignKey("Room", related_name="photos", on_delete=models.CASCADE)
 
     def __str__(self):
@@ -57,7 +57,6 @@ class Photo(core_models.TimeStampedModel):
 
 
 class Room(core_models.TimeStampedModel):
-
     """ Room Model Definition """
 
     name = models.CharField(max_length=140)
@@ -88,5 +87,10 @@ class Room(core_models.TimeStampedModel):
 
     def total_rating(self):
         all_reviews = self.reviews.all()
+        all_ratings = 0
         for review in all_reviews:
-            print(review.ragting_average())
+            all_ratings += review.rating_average()
+        if len(all_reviews) == 0:
+            return all_ratings / 1
+        else:
+            return all_ratings / len(all_reviews)

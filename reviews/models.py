@@ -1,10 +1,9 @@
 from django.db import models
 from core import models as core_models
 
-# Create your models here.
-class Review(core_models.TimeStampedModel):
 
-    """Review Model Definition"""
+class Review(core_models.TimeStampedModel):
+    """ Review Model Definition """
 
     review = models.TextField()
     accuracy = models.IntegerField()
@@ -34,4 +33,4 @@ class Review(core_models.TimeStampedModel):
         ) / 6
         return round(avg, 2)
 
-    rating_average.short_description = "AVG."
+    rating_average.short_description = "Avg."
