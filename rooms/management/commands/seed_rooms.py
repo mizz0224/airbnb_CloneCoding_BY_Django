@@ -1,7 +1,8 @@
+import random
 from django.core.management.base import BaseCommand
 from django_seed import Seed
-from users.models import User
-from rooms.models import room_models
+from rooms import models as room_models
+from users import models as user_models
 
 
 class Command(BaseCommand):
@@ -19,6 +20,21 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         number = options.get("number")
         seeder = Seed.seeder()
-        seeder.add_entity(room_models.Room, number, {})
+        all_users = user_models.User.objects.all()
+        room_types = room_models.RoomType.objects.all()
+        seeder.add_entity(
+            room_models.Room,
+            number,
+            {
+                "name": lambda x: seeder.faker.address(),
+                "host": lambda x: random.choice(all_users),
+                "room_type": lambda x: random.choice(room_types),
+                "guests": lambda x: random.randint(0, 300),
+                "price": lambda x: random.randint(0, 300),
+                "beds": lambda x: random.randint(0, 5),
+                "bedrooms": lambda x: random.randint(0, 5),
+                "baths": lambda x: random.randint(0, 5),
+            },
+        )
         seeder.execute()
         self.stdout.write(self.style.SUCCESS(f"{number}users created!"))
